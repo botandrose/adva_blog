@@ -1,5 +1,8 @@
 class BlogArticlesController < ArticlesController
   def index
+    if @section.categories.any?
+      @category ||= @section.categories.build(title: "All Categories", contents: @articles) 
+    end
     if skip_caching? or stale?(:etag => @section, :last_modified => [@articles.to_a, @section, @site].flatten.collect(&:updated_at).compact.max.utc, :public => true)
       respond_to do |format|
         format.html { render :template => "blogs/articles/index" }
@@ -8,16 +11,10 @@ class BlogArticlesController < ArticlesController
     end
   end
 
-  protected
-    def set_articles
-      scope = @category ? @category.all_contents : @section.articles
-      scope = scope.tagged("'#{@tags}'") if @tags.present?
-      scope = scope.published # (params[:year], params[:month])
-      scope = scope.includes(:approved_comments_counter) if defined?(Comment)
-      @articles = scope.paginate(page: current_page, per_page: @section.contents_per_page).order(published_at: :desc)
-    end
+  public
 
-    def valid_article?
-      @article and (@article.draft? or @article.published_at?(params.values_at(:year, :month, :day)))
-    end
+  def set_articles
+    super
+    @articles.includes!(:approved_comments_counter) if defined?(Comment)
+  end
 end
