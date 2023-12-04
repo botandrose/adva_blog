@@ -1,6 +1,6 @@
 <% content_for :footer do %>
   <div id="footer" class="clearing">
-    <% if @section.categories.present? %>
+    <% if @section.categories.select(&:persisted?).any? %>
       <div>
         <h4>Categories</h4>
         <ul id="categories_list">
@@ -32,8 +32,6 @@
     <% end %>  
   </div>
 
-  <%= render :partial => 'shared/footer' %>
-  
   <ul id="feeds">
     <li><%= link_to "Entries feed", blog_url(@section, :format => :atom) %></li>
   </ul>
