@@ -93,6 +93,32 @@ RSpec.describe BlogArticlesController, type: :controller do
         expect(response.content_type).to include('application/atom+xml')
       end
     end
+
+    context "when Comment is defined (eager loads counters)" do
+      before do
+        # Define a dummy Comment constant to trigger the branch
+        Object.send(:remove_const, :Comment) if Object.const_defined?(:Comment)
+        Object.const_set(:Comment, Class.new)
+
+        # The controller calls `articles.includes!(:approved_comments_counter)`.
+        # Stub includes! on any relation to be a no-op returning the relation.
+        expect_any_instance_of(ActiveRecord::Relation)
+          .to receive(:includes!).with(:approved_comments_counter)
+          .and_return(Article.all)
+
+        @params = { section_permalink: blog.permalink }
+        get :index, params: @params
+      end
+
+      after do
+        Object.send(:remove_const, :Comment) if Object.const_defined?(:Comment)
+      end
+
+      it "renders the index template successfully" do
+        expect(response).to be_successful
+        expect(response).to render_template("blogs/articles/index")
+      end
+    end
   end
 
   describe "GET #show" do

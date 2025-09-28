@@ -4,8 +4,8 @@ require 'simplecov-html'
 
 SimpleCov.start 'rails' do
   add_filter '/spec/'
-  add_filter '/test/'
   add_filter '/vendor/'
+  add_filter '/lib/adva_blog/version.rb'
 
   add_group 'Controllers', 'app/controllers'
   add_group 'Models', 'app/models'

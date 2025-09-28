@@ -12,6 +12,11 @@ RSpec.describe Blog, type: :model do
     it "aliases contents to articles" do
       expect(blog.contents).to eq(blog.articles)
     end
+
+    it "provides permalinks for published articles via association extension" do
+      published = blog.articles.published
+      expect(published.permalinks).to include(article.permalink)
+    end
   end
 
   describe "class methods" do
