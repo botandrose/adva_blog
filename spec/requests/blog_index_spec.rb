@@ -3,21 +3,8 @@ require 'rails_helper'
 RSpec.describe "Blog Index", type: :request do
   include_context :an_article
 
-  let!(:unpublished_article) do
-    Article.create!(
-      site: site,
-      section: blog,
-      title: 'an unpublished blog article',
-      body: 'unpublished article body',
-      categories: [category],
-      author: user,
-      published_at: nil
-    )
-  end
-
-  let!(:another_category) do
-    Category.create!(section: blog, title: 'another blog category')
-  end
+  let(:unpublished_article) { Article.find_by!(title: 'an unpublished blog article') }
+  let(:another_category) { Category.find_by!(section: blog, title: 'another category') }
 
   before do
     # Set up site host for request

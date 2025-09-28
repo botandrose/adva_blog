@@ -3,17 +3,7 @@ require 'rails_helper'
 RSpec.describe "Blog Article", type: :request do
   include_context :an_article
 
-  let!(:unpublished_article) do
-    Article.create!(
-      site: site,
-      section: blog,
-      title: 'an unpublished blog article',
-      body: 'unpublished article body',
-      permalink: 'an-unpublished-blog-article',
-      author: user,
-      published_at: nil
-    )
-  end
+  let(:unpublished_article) { Article.find_by!(title: 'an unpublished blog article') }
 
   before do
     host! 'site-with-blog.com'

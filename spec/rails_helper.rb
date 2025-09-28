@@ -1,25 +1,9 @@
 ENV["RAILS_ENV"] ||= "test"
 
-# Start SimpleCov before loading any application code
-require 'simplecov'
-require 'simplecov-html'
+require "spec_helper"
 
-SimpleCov.start 'rails' do
-  add_filter '/spec/'
-  add_filter '/test/'
-  add_filter '/vendor/'
-
-  add_group 'Controllers', 'app/controllers'
-  add_group 'Models', 'app/models'
-  add_group 'Helpers', 'app/helpers'
-  add_group 'Views', 'app/views'
-  add_group 'Libraries', 'lib'
-
-  formatter SimpleCov::Formatter::HTMLFormatter
-end
-
-# Load the dummy Rails application
-require File.expand_path('dummy/config/environment', __dir__)
+# Load the internal Rails application
+require File.expand_path('internal/config/environment', __dir__)
 
 # Load RSpec Rails
 require 'rspec/rails'
@@ -43,6 +27,7 @@ RSpec.configure do |config|
   config.before do
     if defined?(ActionController::Base)
       ActionController::Base.allow_forgery_protection = false
+      Rails.application.env_config["action_dispatch.show_detailed_exceptions"] = true
     end
   end
 
@@ -52,6 +37,21 @@ RSpec.configure do |config|
     I18n.locale = :en
   end
 end
+
+# Run migrations from adva gem and any other engines
+ActiveRecord::Migration.verbose = false
+ActiveRecord::Tasks::DatabaseTasks.drop_current
+ActiveRecord::Tasks::DatabaseTasks.create_current
+
+# Load migrations from adva gem
+adva_gem_path = Gem.loaded_specs["adva"]&.full_gem_path
+if adva_gem_path && Dir.exist?(File.join(adva_gem_path, "db", "migrate"))
+  ActiveRecord::Migrator.migrations_paths = [File.join(adva_gem_path, "db", "migrate")]
+  ActiveRecord::Tasks::DatabaseTasks.migrate
+end
+
+# Load test data
+load File.join(__dir__, "internal", "db", "seed_for_tests.rb")
 
 # Load support files
 spec_root = File.expand_path('..', __dir__)

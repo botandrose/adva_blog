@@ -1,6 +1,6 @@
 RSpec.shared_context :a_blog do
-  let!(:site) { Site.create!(name: 'site with blog', title: 'site with blog title', host: 'site-with-blog.com') }
-  let!(:blog) { Blog.create!(site: site, title: 'a blog', permalink: 'a-blog', comment_age: 0, published_at: Time.parse('2008-01-01 12:00:00')) }
+  let(:site) { Site.find_by!(host: 'site-with-blog.com') }
+  let(:blog) { Blog.find_by!(permalink: 'a-blog') }
   let(:section) { blog }
 
   before do
@@ -12,7 +12,7 @@ end
 
 RSpec.shared_context :a_category do
   include_context :a_blog
-  let!(:category) { Category.create!(section: blog, title: 'a category') }
+  let(:category) { Category.find_by!(section: blog, title: 'a category') }
 
   before do
     @category = category
@@ -22,19 +22,8 @@ end
 RSpec.shared_context :an_article do
   include_context :a_blog
   include_context :a_category
-  let!(:user) { User.create!(first_name: 'a user', email: 'user@example.com', password: 'SecurePassword123!') }
-  let!(:article) do
-    Article.create!(
-      site: site,
-      section: blog,
-      title: 'a blog article',
-      body: 'a blog article body',
-      categories: [category],
-      tag_list: 'foo bar',
-      author: user,
-      published_at: Time.parse('2008-01-01 12:00:00')
-    )
-  end
+  let(:user) { User.find_by!(first_name: 'a user') }
+  let(:article) { Article.find_by!(title: 'a blog article') }
 
   before do
     @article = article
