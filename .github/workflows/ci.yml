@@ -13,13 +13,16 @@ jobs:
           "gemfiles/rails_7_2.gemfile",
           "gemfiles/rails_8_0.gemfile"
         ]
+
     steps:
       - name: Checkout
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
+
       - name: Setup Ruby
-      - uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+
       - name: Run tests
         run: bundle exec rake
