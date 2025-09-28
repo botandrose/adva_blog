@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
-require "rails/all"
+# Selective Railties to avoid frameworks we don't need in tests (e.g., ActionText)
+require "rails"
+require "active_record/railtie"
+require "action_controller/railtie"
+require "action_view/railtie"
+require "action_mailer/railtie"
+require "active_job/railtie"
 require "adva"
 require "adva_blog"
 

@@ -179,7 +179,7 @@ Once you’ve created a Blog section in the admin UI, you can link to it and to 
 
 
 Development
------------
+------------
 
 This gem includes a dummy Rails app and RSpec test suite.
 
@@ -191,6 +191,29 @@ bundle exec rspec
 ```
 
 Coverage is tracked via SimpleCov and outputs HTML under `coverage/`.
+
+### Appraisals (multiple Rails versions)
+
+This project uses Appraisal to test against multiple Rails versions.
+
+Install appraisal Gemfiles:
+
+```bash
+bundle exec appraisal install
+```
+
+Run specs for a specific appraisal:
+
+```bash
+bundle exec appraisal rails-7.2 rspec
+bundle exec appraisal rails-8.0 rspec
+```
+
+Or run the full matrix:
+
+```bash
+bundle exec appraisal rspec
+```
 
 
 Compatibility

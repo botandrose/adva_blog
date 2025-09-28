@@ -17,11 +17,13 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "adva"
 
-  gem.add_development_dependency "rspec-rails", "~> 6.1"
+  gem.add_development_dependency "rspec-rails", ">= 6.1", "< 8.0"
   gem.add_development_dependency "rails-controller-testing", "~> 1.0"
-  gem.add_development_dependency "rails", "~> 7.2"
+  # Allow Rails to be selected by Appraisal gemfiles
+  gem.add_development_dependency "rails", ">= 7.2", "< 9.0"
   gem.add_development_dependency "sqlite3", "~> 1.7"
   gem.add_development_dependency "simplecov", "~> 0.22"
   gem.add_development_dependency "simplecov-html", "~> 0.13"
   gem.add_development_dependency "debug"
+  gem.add_development_dependency "appraisal", "~> 2.5"
 end
