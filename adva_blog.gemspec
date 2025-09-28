@@ -14,4 +14,13 @@ Gem::Specification.new do |gem|
   gem.name          = "adva_blog"
   gem.require_paths = ["lib"]
   gem.version       = AdvaBlog::VERSION
+
+  gem.add_dependency "adva"
+
+  gem.add_development_dependency "rspec-rails", "~> 6.1"
+  gem.add_development_dependency "rails-controller-testing", "~> 1.0"
+  gem.add_development_dependency "rails", "~> 7.2"
+  gem.add_development_dependency "sqlite3", "~> 1.7"
+  gem.add_development_dependency "simplecov", "~> 0.22"
+  gem.add_development_dependency "simplecov-html", "~> 0.13"
 end
